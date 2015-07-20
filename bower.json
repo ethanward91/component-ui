@@ -10,7 +10,7 @@
   "dependencies": {
     "angular": "~1.4.3",
     "angular-route": "~1.4.3"
-  }
+  },
   "description": "Angular abstraction for writing Angular2 style components in Angular 1.x",
   "moduleType": [
     "amd",
