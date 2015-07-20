@@ -1,14 +1,33 @@
 {
-  "name": "component",
-  "url": "https://github.com/ethanward91/component-ui.git"
-  "description": "Angular abstraction for writing Angular2 style components with Angular 1.x",
+  "name": "component-ui",
+  "main": "component-ui.js",
   "version": "0.1.0",
+  "homepage": "https://github.com/ethanward91/component-ui",
+  "authors": [
+    "Ward",
+    "Ethan <graymaul@gmail.com>"
+  ],
   "dependencies": {
     "angular": "~1.4.3",
     "angular-route": "~1.4.3"
-  },
-  "moduleType": ["amd"],
-  "keywords": ["angular", "angular2", "components", "ui"],
-  "authors": ["Ward, Ethan graymaul@gmail.com"],
-  "license": "MIT"
+  }
+  "description": "Angular abstraction for writing Angular2 style components in Angular 1.x",
+  "moduleType": [
+    "amd",
+    "es6"
+  ],
+  "keywords": [
+    "angular",
+    "components",
+    "ui",
+    "angular2"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
