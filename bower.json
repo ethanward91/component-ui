@@ -1,5 +1,6 @@
 {
   "name": "component",
+  "url": "https://github.com/ethanward91/component-ui.git"
   "description": "Angular abstraction for writing Angular2 style components with Angular 1.x",
   "version": "0.1.0",
   "dependencies": {
