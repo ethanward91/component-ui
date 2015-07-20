@@ -1,8 +1,13 @@
 {
   "name": "component",
+  "description": "Angular abstraction for writing Angular2 style components with Angular 1.x",
   "version": "0.1.0",
   "dependencies": {
     "angular": "~1.4.3",
     "angular-route": "~1.4.3"
-  }
+  },
+  "moduleType": ["amd"],
+  "keywords": ["angular", "angular2", "components", "ui"],
+  "authors": ["Ward, Ethan graymaul@gmail.com"],
+  "license": "MIT"
 }
