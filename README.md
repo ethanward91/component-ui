@@ -16,11 +16,16 @@ By using features such as decorators to define your component, set your route, o
 
 
 
-#### Creating Components
-##
+## Creating Components
+### View Decorator
+Components are created by simply importing the "View" decorator from the "component-ui/ui" module. The View decorator is mearly just an abstraction over angular directives.
 
 ```javascript
-  import {View} from 'component/ui';
+  import {View} from 'component-ui/ui';
+```
+
+```javascript
+  import {View} from 'component-ui/ui';
 
   @View({
     templateUrl: 'app/myApp.html'
@@ -31,29 +36,81 @@ By using features such as decorators to define your component, set your route, o
     }
   }
 ```
-
-#### Bootstrapping an application
-##
+API's for the View decorator: 
 ```javascript
- import {View, bootstrap} from 'component/ui';
+@View({
+	selector: '', // Used if your component name is not the same name as your class.
+    template: '',
+    templateUrl: '',
+    restrict: '', //Defaults to "E"
+    directives: ['ngModel', 'myApp'], //This relates to the angular directive's require property
+    components: [MyOtherComponent, MyService] //List of components or sevices you need to register with the component.
+})
+```
 
-  @View({
-    templateUrl: 'app/myApp.html'
-  })
-  class MyApp{
-    constructor(){
 
-    }
-  }
-  
+In order to bootstrap our applications, which we have to now do manually since we are creating components/modules after angular's initial bootstrapping process. We just pull in the "bootstrap" function from the "component-ui/ui" module:
+```javascript
   bootstrap('myApp', ['component.ui', '...Any other dependencies']);
 ```
+After we've setup our initial entry point for our application we simple drop the component in our index.html page as shown below:
 
-#### Creating a Component with a Route
-##
+```html
+<html>
+	<head>
+    	<!-- Your script references -->
+    </head>
+    <body>
+    	<my-app></my-app>
+    </body>
+</html>
+```
+*Note that we are not setting ng-app anywhere in our index.html page. This is because the bootstrap function handles this for us, by calling the angular.bootstrap() method.
+
+Now that we have our entry component setup and wired into our index.html. Next is to wire up the System.js loader, or module loader of your choice, and setup our System.config to map our modules.
+
 ```javascript
-  import {View} from 'component/ui';
-  import {Router} from 'component/router';
+System.config({
+	"map": {
+    	"app": "myApp.js"
+    }
+});
+```
+
+```html
+<html>
+	<head>
+    	<!-- Your script references -->
+        <script src="node_modules/systemjs/bin/system.js"></script>
+        <script src="config.js"></script>
+    </head>
+    <body>
+    	<my-app></my-app>
+        <script>
+        	System.import("app");
+        </script>
+    </body>
+</html>
+```
+### Route Decorator
+##
+To setup a routable component, simply import the "Router" decorator from the "component-ui/router" module.
+```javascript
+ import {Router} from 'component-ui/router';
+```
+
+The current implementation for routing is using the ngRoute module. So our API for the Router decorator is as follows: 
+```javascript
+	@Router({
+    	url: '#/myUrl'
+        config: {
+        	//whatever values you need in your route.
+        }
+    })
+```
+```javascript
+  import {View} from 'component-ui/ui';
+  import {Router} from 'component-ui/router';
 
   @View({
     templateUrl: 'app/pageOne.html'
@@ -67,12 +124,28 @@ By using features such as decorators to define your component, set your route, o
     }
   }
 ```
+Now that we've set up a routable component. We need to tell the entry component that we are going to be using this in our application.
+```javascript
+  import {View} from 'component-ui/ui';
+  import {Customer} from 'directory/location/of/component'
 
-#### Creating Services
+  @View({
+    templateUrl: 'app/myApp.html',
+    components: [Customer]
+  })
+  class MyApp{
+    constructor(){
+
+    }
+  }
+```
+Doing this will tell the module loader system, that this is a dependency in our application and needs to be loaded with our app.
+
+### Service Decorator
 ##
 The Service decorator creates an angular service, names it after the associated class, and then add the service to the "component.ui" module.
 ```javascript
-  import {Service} from 'component/ui';
+  import {Service} from 'component-ui/ui';
 
   @Service({})
   export class MyService{
@@ -92,8 +165,8 @@ The Service decorator creates an angular service, names it after the associated 
 To use the above service in our component we just import the service, and tell the component we are going to be using it.
 
 ```javascript
-  import {View} from 'component/ui';
-  import {Router} from 'component/router';
+  import {View} from 'component-ui/ui';
+  import {Router} from 'component-ui/router';
   import {MyService} from 'services/myService';
 
   @View({
