@@ -1,4 +1,4 @@
-///<reference path="../typings/tsd.d.ts" />
+///<reference path="typings/tsd.d.ts" />
 angular.module('component.ui', ['component.ui.directives','component.ui.components', 'component.ui.services']);
 import { ViewAnnotation as View } from 'annotations/viewAnnotation';
 import { DirectiveAnnotation as Directive } from 'annotations/directiveAnnotation';

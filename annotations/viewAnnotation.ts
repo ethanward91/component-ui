@@ -1,4 +1,4 @@
-///<reference path="../../typings/tsd.d.ts" />
+///<reference path="../typings/tsd.d.ts" />
 let ngModule:ng.IModule;
 ngModule = angular.module('component.ui.components', []);
 export function ViewAnnotation({selector, template, templateUrl, directives = [], properties = {}, transclude = false, restrict = 'E', components = []}: {

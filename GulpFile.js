@@ -6,38 +6,48 @@
         concat = require('gulp-concat'),
         uglify = require('gulp-uglify'),
         tsc = require('gulp-tsc');
-
-
-
+        
 
     var sources = {
         ts: [
-            'annotations/*.ts',
-            'component/*.ts'
+            'annotations/*.ts'
         ]
     };
 
     gulp.task('build', function(){
         var Builder = require('systemjs-builder');
         var builder = new Builder({
+            meta: {
+              format: 'register'  
+            },
             map: {
                 'annotations/directiveAnnotation': 'annotations/directiveAnnotation.js',
                 'annotations/viewAnnotation': 'annotations/viewAnnotation.js',
                 'annotations/bootstrapper': 'annotations/bootstrapper.js',
-                'annotations/serviceAnnotation': 'annotations/serviceAnnotation.js'
+                'annotations/serviceAnnotation': 'annotations/serviceAnnotation.js',
+                'component/ui': 'ui.js'
             }
         });
-        builder.build('component/ui.js', 'component-ui.js', {sourceMaps: true});
-        builder.build('component/router.js', 'component-router.js', {sourceMaps: true});
+        builder.build('component/ui', 'componet-ui.js', {sourceMaps: true, minify:true, mangle: true});
         return gulp.src('');
 
     });
 
     gulp.task('compileTypescript', function(){
-        return gulp.src(sources.ts)
+        gulp.src(sources.ts)
             .pipe(tsc({
-                target: 'ES5'
-            }));
-    })
-
+                target: 'ES5',
+                module: 'system',
+                sourceMap: true
+            }))
+            .pipe(gulp.dest('annotations'));
+            
+        gulp.src(['ui.ts', 'router.ts'])
+              .pipe(tsc({
+                target: 'ES5',
+                module: 'system',
+                sourceMap: true
+            }))
+            .pipe(gulp.dest(''));
+    });
 })();

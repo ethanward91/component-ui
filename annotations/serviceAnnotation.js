@@ -1,7 +1,5 @@
-define(["require", "exports"], function (require, exports) {
-    ///<reference path="../../typings/tsd.d.ts" />
+System.register([], function(exports_1) {
     var ngModule;
-    ngModule = angular.module('component.ui.services', []);
     function ServiceAnnotation(_a) {
         var selector = _a.selector, _b = _a.components, components = _b === void 0 ? [] : _b;
         return function (target) {
@@ -15,6 +13,13 @@ define(["require", "exports"], function (require, exports) {
             ngModule.service(serviceName, target);
         };
     }
-    exports.ServiceAnnotation = ServiceAnnotation;
+    exports_1("ServiceAnnotation", ServiceAnnotation);
+    return {
+        setters:[],
+        execute: function() {
+            ///<reference path="../typings/tsd.d.ts" />
+            ngModule = angular.module('component.ui.services', []);
+        }
+    }
 });
 //# sourceMappingURL=serviceAnnotation.js.map

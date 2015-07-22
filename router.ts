@@ -1,4 +1,4 @@
-///<reference path="../typings/tsd.d.ts" />
+///<reference path="typings/tsd.d.ts" />
 let ngModule:ng.IModule;
 ngModule = angular.module('component.ui.router', ['ngRoute']);
 export function Router({url, config = {}}: {url:string; config?:any}){

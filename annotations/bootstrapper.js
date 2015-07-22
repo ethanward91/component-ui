@@ -1,9 +1,14 @@
-define(["require", "exports"], function (require, exports) {
-    ///<reference path="../../typings/tsd.d.ts" />
+System.register([], function(exports_1) {
+    ///<reference path="../typings/tsd.d.ts" />
     function bootstrap(app, modules) {
         angular.module(app, modules);
         angular.bootstrap(document, [app]);
     }
-    exports.bootstrap = bootstrap;
+    exports_1("bootstrap", bootstrap);
+    return {
+        setters:[],
+        execute: function() {
+        }
+    }
 });
 //# sourceMappingURL=bootstrapper.js.map

@@ -1,7 +1,5 @@
-define(["require", "exports"], function (require, exports) {
-    ///<reference path="../typings/tsd.d.ts" />
+System.register([], function(exports_1) {
     var ngModule;
-    ngModule = angular.module('component.ui.router', ['ngRoute']);
     function Router(_a) {
         var url = _a.url, _b = _a.config, config = _b === void 0 ? {} : _b;
         return function (target) {
@@ -15,6 +13,13 @@ define(["require", "exports"], function (require, exports) {
                 }]);
         };
     }
-    exports.Router = Router;
+    exports_1("Router", Router);
+    return {
+        setters:[],
+        execute: function() {
+            ///<reference path="typings/tsd.d.ts" />
+            ngModule = angular.module('component.ui.router', ['ngRoute']);
+        }
+    }
 });
 //# sourceMappingURL=router.js.map

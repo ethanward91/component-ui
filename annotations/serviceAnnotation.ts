@@ -1,4 +1,4 @@
-///<reference path="../../typings/tsd.d.ts" />
+///<reference path="../typings/tsd.d.ts" />
 let ngModule:ng.IModule;
 ngModule = angular.module('component.ui.services', []);
 export function ServiceAnnotation({selector, components = []}:{selector?: string; components?: any[]}){
