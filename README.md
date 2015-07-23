@@ -1,6 +1,4 @@
 # component-ui
-*ReadME is still under progress... Just wanted to get something up. I'll get better examples and docs up soon. 
-
 Component based architectural abstraction over angular 1.x
 
 
