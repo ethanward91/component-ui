@@ -24,5 +24,3 @@ declare module ui {
     function bootstrap(app: string, modules?: Array<string>);
     function Service({selector}: {selector?: string});
 }
-
-
