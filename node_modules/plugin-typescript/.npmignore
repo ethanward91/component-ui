@@ -1,7 +1,0 @@
-*.log
-node_modules/
-jspm_packages/
-build/
-components/
-coverage/
-tmp/

@@ -1,1 +1,0 @@
-module.exports = require("github:mhegazy/typescript@v1.5-beta2/bin/typescript");
