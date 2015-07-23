@@ -38,6 +38,7 @@
             .pipe(tsc({
                 target: 'ES5',
                 module: 'system',
+                declarations: true,
                 sourceMap: true
             }))
             .pipe(gulp.dest('annotations'));
