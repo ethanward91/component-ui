@@ -1,7 +1,10 @@
 {
   "name": "component-ui",
   "version": "0.1.1",
-  "repository": "https://github.com/ethanward91/component-ui.git",
+  "repository" :{
+     "type" : "git",
+     "url" : "https://github.com/ethanward91/component-ui.git"
+  },
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
