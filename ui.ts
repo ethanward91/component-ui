@@ -1,8 +1,84 @@
 ///<reference path="typings/tsd.d.ts" />
-angular.module('component.ui', ['component.ui.directives','component.ui.components', 'component.ui.services']);
-import { ViewAnnotation as View } from 'annotations/viewAnnotation';
-import { DirectiveAnnotation as Directive } from 'annotations/directiveAnnotation';
-import { bootstrap } from 'annotations/bootstrapper';
-import { ServiceAnnotation as Service} from 'annotations/serviceAnnotation';
+angular.module('component.ui', ['component.ui.components']);
+let ngModule:ng.IModule;
+ngModule = angular.module('component.ui.components', []);
+export function View({selector, template, templateUrl, directives = [], properties = {}, transclude = false, restrict = 'E', components = []}: {
+    selector?:string;
+    template?:string;
+    templateUrl?:string;
+    directives?:Array<string> | string;
+    properties?:any;
+    transclude?: boolean;
+    restrict?: string;
+    components?: Array<Function>;
+}){
+    return function(target){
+        var componentName;
+        if(selector){
+            componentName = selector;
+        }
+        else{
+            componentName  = target.name.replace(/\w\S*/g, (txt) => {return txt.charAt(0).toLowerCase() + txt.substr(1);});
+        }
+        ngModule.directive(componentName, () =>{
+            return {
+                template:template,
+                controller: target,
+                controllerAs: 'vm',
+                templateUrl:templateUrl,
+                require: directives,
+                scope: properties,
+                restrict: restrict,
+                transclude: transclude
+            }
+        });
+    }
+}
+export function Directive({selector, template, templateUrl, properties, restrict = 'A', link = null}:{
+    selector?: string;
+    template?: string;
+    templateUrl?: string;
+    properties?: any;
+    restrict?: string;
+    link?: Function;
+}){
+    return function(target){
+        var directiveName;
+        if(selector){
+            directiveName = selector;
+        }
+        else{
+            directiveName  = target.name.replace(/\w\S*/g, (txt) => {return txt.charAt(0).toLowerCase() + txt.substr(1);});
+        }
 
-export {View, Directive, bootstrap, Service}
+        ngModule.directive(directiveName, () =>{
+            return {
+                template:template,
+                controller: target,
+                controllerAs: 'vm',
+                templateUrl:templateUrl,
+                scope: properties,
+                restrict: restrict,
+                link: link
+            }
+        });
+    }
+}
+export function Service({selector, components = []}:{selector?: string; components?: any[]}){
+    return function(target){
+        var serviceName;
+        if(selector){
+            serviceName = selector;
+        }
+        else{
+            serviceName  = target.name;
+        }
+
+
+        ngModule.service(serviceName, target);
+    }
+}
+export function bootstrap(app: string, modules?: Array<string>){
+    angular.module(app, modules);
+    angular.bootstrap(document, [app]);
+}
