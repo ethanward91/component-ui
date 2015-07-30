@@ -1,5 +1,5 @@
-///<reference path="typings/tsd.d.ts" />
-let ngModule:ng.IModule;
+///<reference path="../../typings/tsd.d.ts" />
+let ngModule:angular.IModule;
 ngModule = angular.module('component.ui.router', ['ngRoute']);
 export function Router({url, config = {}}: {url:string; config?:any}){
     return function(target){

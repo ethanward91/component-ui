@@ -1,6 +1,6 @@
-///<reference path="typings/tsd.d.ts" />
+///<reference path="../../typings/tsd.d.ts" />
 angular.module('component.ui', ['component.ui.components']);
-let ngModule:ng.IModule;
+let ngModule:angular.IModule;
 ngModule = angular.module('component.ui.components', []);
 export function View({selector, template, templateUrl, directives = [], properties = {}, transclude = false, restrict = 'E', components = []}: {
     selector?:string;
