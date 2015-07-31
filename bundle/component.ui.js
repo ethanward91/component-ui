@@ -31,7 +31,7 @@ define("src/ui.js", ["require", "exports"], function(require, exports) {
         return {
           template: template,
           controller: target,
-          controllerAs: 'vm',
+          controllerAs: componentName,
           templateUrl: templateUrl,
           require: directives,
           scope: properties,
@@ -64,7 +64,7 @@ define("src/ui.js", ["require", "exports"], function(require, exports) {
         return {
           template: template,
           controller: target,
-          controllerAs: 'vm',
+          controllerAs: directiveName,
           templateUrl: templateUrl,
           scope: properties,
           restrict: restrict,

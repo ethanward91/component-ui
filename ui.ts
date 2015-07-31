@@ -1,6 +1,10 @@
-///<reference path="../../typings/tsd.d.ts" />
+declare module angular{
+    function module(moduleName: string, modules?:string[]);
+    function bootstrap(element:any, modules?:string[])
+}
+
 angular.module('component.ui', ['component.ui.components']);
-let ngModule:angular.IModule;
+let ngModule;
 ngModule = angular.module('component.ui.components', []);
 export function View({selector, template, templateUrl, directives = [], properties = {}, transclude = false, restrict = 'E', components = []}: {
     selector?:string;
@@ -24,7 +28,7 @@ export function View({selector, template, templateUrl, directives = [], properti
             return {
                 template:template,
                 controller: target,
-                controllerAs: 'vm',
+                controllerAs: componentName,
                 templateUrl:templateUrl,
                 require: directives,
                 scope: properties,
@@ -55,7 +59,7 @@ export function Directive({selector, template, templateUrl, properties, restrict
             return {
                 template:template,
                 controller: target,
-                controllerAs: 'vm',
+                controllerAs: directiveName,
                 templateUrl:templateUrl,
                 scope: properties,
                 restrict: restrict,

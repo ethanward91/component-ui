@@ -1,5 +1,8 @@
-///<reference path="../../typings/tsd.d.ts" />
-let ngModule:angular.IModule;
+declare module angular{
+    function module(moduleName: string, modules?:string[]);
+}
+
+let ngModule;
 ngModule = angular.module('component.ui.router', ['ui.router']);
 export function Router({url, config = {}}: {url:string; config?:any}){
     return function(target){
@@ -15,8 +18,8 @@ export function Router({url, config = {}}: {url:string; config?:any}){
 }
 
 ///TODO: Replace with above and rename to just Router
-export function ComponentRouter({url, config = {}}: {url:string; config?: {parent?: Function; defaultRoute?: string; params?: any}}){
-    return function(target: Function){
+export function ComponentRouter({url, config = {}}: {url:string; config?: {parent?: any; defaultRoute?: string; params?: any}}){
+    return function(target){
         ngModule.config(['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => {
                 
             var selector = target.name

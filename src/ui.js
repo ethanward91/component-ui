@@ -1,5 +1,4 @@
 define(["require", "exports"], function (require, exports) {
-    ///<reference path="typings/tsd.d.ts" />
     angular.module('component.ui', ['component.ui.components']);
     var ngModule;
     ngModule = angular.module('component.ui.components', []);
@@ -17,7 +16,7 @@ define(["require", "exports"], function (require, exports) {
                 return {
                     template: template,
                     controller: target,
-                    controllerAs: 'vm',
+                    controllerAs: componentName,
                     templateUrl: templateUrl,
                     require: directives,
                     scope: properties,
@@ -42,7 +41,7 @@ define(["require", "exports"], function (require, exports) {
                 return {
                     template: template,
                     controller: target,
-                    controllerAs: 'vm',
+                    controllerAs: directiveName,
                     templateUrl: templateUrl,
                     scope: properties,
                     restrict: restrict,
