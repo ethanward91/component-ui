@@ -31,30 +31,34 @@ export function ComponentRouter({url, config = {}}: {url:string; config?: {paren
             //capturning the parent's state name.
             var parentState: string = "";
             if(config.parent){
-                parentState = config.parent.name
-                                    .replace(/\W+/g, '-')
-                                    .replace(/([a-z\d])([A-Z])/g, '$1-$2')
-                                    .toLowerCase();
+              parentState = config.parent.name.replace(/\w\S*/g, function (txt) {
+                return txt.charAt(0).toLowerCase() + txt.substr(1);
+              });
             }
             var template = '<' + selector + '></' + selector + '>';
             
-            var state = selector + config.parent ? '.' + parentState : '';
+            var stateName = target.name.replace(/\w\S*/g, function (txt) {
+                return txt.charAt(0).toLowerCase() + txt.substr(1);
+            });
             
+            stateName = stateName + (config.parent ? ('.' + parentState) : '');
             if(config.defaultRoute){
                 $urlRouterProvider.otherwise(config.defaultRoute);
             }
             
-            var stateConfig:any;
+            var stateConfig:any = {};
             
             stateConfig.url = url;
             stateConfig.template = template;
             
-            Object.getOwnPropertyNames(config.params).forEach((item) => {
+            if(config.params){
+                Object.getOwnPropertyNames(config.params).forEach((item) => {
                     stateConfig[item] = config.params[item];
-            });
+                });
+            }
             
             $stateProvider
-                .state(state, stateConfig);
+                .state(stateName, stateConfig);
         }]);
     }
 }
