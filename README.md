@@ -5,10 +5,10 @@ Component based architectural abstraction over angular 1.x
 Component-UI will allow you to write Angular 1.x applications with an Angular 2 look and feel.
 By using features such as decorators to define your component, set your route, or create directives.
 
-*Note: This is NOT a replacement for Angular 2. This is just simply a way to get familiarized with a more component driven architecture. Also, this IS using Typescript 1.5-beta. So be mindful of this when/if using Component-UI for production code.
+*Note: This is NOT a replacement for Angular 2. This is just simply a way to get familiarized with a more component driven architecture.
 
 ### Pre-reqs
-* Component-UI is built using [Typescript 1.5-beta](https://github.com/Microsoft/TypeScript), so in order to use you MUST install.
+* Component-UI is built using [Typescript 1.5](https://github.com/Microsoft/TypeScript), so in order to use you MUST install.
 * A Module Loader will also bee needed in order for things to work properly. Component-UI is build using [SystemJS](https://github.com/systemjs/systemjs)
 * Component-UI is written to use [AngularJS](https://angularjs.org/) 1.4, but should work fine with 1.3.*
 
@@ -98,7 +98,7 @@ To setup a routable component, simply import the "Router" decorator from the "co
  import {Router} from 'component/router';
 ```
 
-The current implementation for routing is using the ngRoute module. So our API for the Router decorator is as follows: 
+The current implementation for routing is using the ngRoute module (working on moving to ui-router). So our API for the Router decorator is as follows: 
 ```javascript
 	@Router({
     	url: '#/myUrl'
