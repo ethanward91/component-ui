@@ -3,7 +3,7 @@ declare module angular{
 }
 
 let ngModule;
-ngModule = angular.module('component.ui.router', ['ui.router']);
+ngModule = angular.module('component.ui.router', ['ngRoute']);
 export function Router({url, config = {}}: {url:string; config?:any}){
     return function(target){
         ngModule.config(['$routeProvider', ($routeProvider) =>{
@@ -18,6 +18,7 @@ export function Router({url, config = {}}: {url:string; config?:any}){
 }
 
 ///TODO: Replace with above and rename to just Router
+ngModule = angular.module('component.router', ['ui.router']);
 export function ComponentRouter({url, config = {}}: {url:string; config?: {parent?: any; defaultRoute?: string; params?: any}}){
     return function(target){
         ngModule.config(['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => {

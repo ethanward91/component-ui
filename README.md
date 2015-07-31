@@ -101,7 +101,7 @@ To setup a routable component, simply import the "Router" decorator from the "co
 The current implementation for routing is using the ngRoute module (working on moving to ui-router). So our API for the Router decorator is as follows: 
 ```javascript
 	@Router({
-    	url: '#/myUrl'
+    	url: '/myUrl'
         config: {
         	//whatever values you need in your route.
         }
