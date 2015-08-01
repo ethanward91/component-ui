@@ -2,7 +2,7 @@
 var _removeDefine = System.get("@@amd-helpers").createDefine();
 define("src/router.js", ["require", "exports"], function(require, exports) {
   var ngModule;
-  ngModule = angular.module('component.ui.router', ['ui.router']);
+  ngModule = angular.module('component.ui.router', ['ngRoute']);
   function Router(_a) {
     var url = _a.url,
         _b = _a.config,
@@ -16,6 +16,7 @@ define("src/router.js", ["require", "exports"], function(require, exports) {
     };
   }
   exports.Router = Router;
+  ngModule = angular.module('component.router', ['ui.router']);
   function ComponentRouter(_a) {
     var url = _a.url,
         _b = _a.config,
@@ -23,22 +24,23 @@ define("src/router.js", ["require", "exports"], function(require, exports) {
     return function(target) {
       ngModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         var selector = target.name.replace(/\W+/g, '-').replace(/([a-z\d])([A-Z])/g, '$1-$2').toLowerCase();
-        var parentState = "";
-        if (config.parent) {
-          parentState = config.parent.name.replace(/\W+/g, '-').replace(/([a-z\d])([A-Z])/g, '$1-$2').toLowerCase();
-        }
         var template = '<' + selector + '></' + selector + '>';
-        var state = selector + config.parent ? '.' + parentState : '';
+        var stateName = target.name.replace(/\w\S*/g, function(txt) {
+          return txt.charAt(0).toLowerCase() + txt.substr(1);
+        });
+        stateName = (config.parent ? (config.parent + '.') : '') + stateName;
         if (config.defaultRoute) {
           $urlRouterProvider.otherwise(config.defaultRoute);
         }
-        var stateConfig;
+        var stateConfig = {};
         stateConfig.url = url;
         stateConfig.template = template;
-        Object.getOwnPropertyNames(config.params).forEach(function(item) {
-          stateConfig[item] = config.params[item];
-        });
-        $stateProvider.state(state, stateConfig);
+        if (config.params) {
+          Object.getOwnPropertyNames(config.params).forEach(function(item) {
+            stateConfig[item] = config.params[item];
+          });
+        }
+        $stateProvider.state(stateName, stateConfig);
       }]);
     };
   }

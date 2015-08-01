@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     var ngModule;
-    ngModule = angular.module('component.ui.router', ['ui.router']);
+    ngModule = angular.module('component.ui.router', ['ngRoute']);
     function Router(_a) {
         var url = _a.url, _b = _a.config, config = _b === void 0 ? {} : _b;
         return function (target) {
@@ -16,6 +16,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.Router = Router;
     ///TODO: Replace with above and rename to just Router
+    ngModule = angular.module('component.router', ['ui.router']);
     function ComponentRouter(_a) {
         var url = _a.url, _b = _a.config, config = _b === void 0 ? {} : _b;
         return function (target) {
@@ -24,27 +25,24 @@ define(["require", "exports"], function (require, exports) {
                         .replace(/\W+/g, '-')
                         .replace(/([a-z\d])([A-Z])/g, '$1-$2')
                         .toLowerCase();
-                    //capturning the parent's state name.
-                    var parentState = "";
-                    if (config.parent) {
-                        parentState = config.parent.name
-                            .replace(/\W+/g, '-')
-                            .replace(/([a-z\d])([A-Z])/g, '$1-$2')
-                            .toLowerCase();
-                    }
                     var template = '<' + selector + '></' + selector + '>';
-                    var state = selector + config.parent ? '.' + parentState : '';
+                    var stateName = target.name.replace(/\w\S*/g, function (txt) {
+                        return txt.charAt(0).toLowerCase() + txt.substr(1);
+                    });
+                    stateName = (config.parent ? (config.parent + '.') : '') + stateName;
                     if (config.defaultRoute) {
                         $urlRouterProvider.otherwise(config.defaultRoute);
                     }
-                    var stateConfig;
+                    var stateConfig = {};
                     stateConfig.url = url;
                     stateConfig.template = template;
-                    Object.getOwnPropertyNames(config.params).forEach(function (item) {
-                        stateConfig[item] = config.params[item];
-                    });
+                    if (config.params) {
+                        Object.getOwnPropertyNames(config.params).forEach(function (item) {
+                            stateConfig[item] = config.params[item];
+                        });
+                    }
                     $stateProvider
-                        .state(state, stateConfig);
+                        .state(stateName, stateConfig);
                 }]);
         };
     }

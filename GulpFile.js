@@ -7,8 +7,8 @@
         uglify = require('gulp-uglify'),
         tsc = require('gulp-tsc');
         
-        
-    gulp.task('build', function(){
+    gulp.task('build', ['bundle'])    
+    gulp.task('bundle', ['compileTypescript'], function(){
         var Builder = require('systemjs-builder');
         var builder = new Builder({
             meta: {
@@ -31,7 +31,7 @@
     });
     
     gulp.task('compileTypescript', function(){
-        gulp.src(['ui.ts', 'router.ts'])
+        return gulp.src(['ui.ts', 'router.ts'])
               .pipe(tsc({
                 target: 'ES5',
                 module: 'amd',
