@@ -19,7 +19,7 @@ export function Router({url, config = {}}: {url:string; config?:any}){
 
 ///TODO: Replace with above and rename to just Router
 ngModule = angular.module('component.router', ['ui.router']);
-export function ComponentRouter({url, config = {}}: {url:string; config?: {parent?: any; defaultRoute?: string; params?: any}}){
+export function ComponentRouter({url, config = {}}: {url:string; config?: {parent?: string; defaultRoute?: string; params?: any}}){
     return function(target){
         ngModule.config(['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => {
                 
@@ -27,21 +27,14 @@ export function ComponentRouter({url, config = {}}: {url:string; config?: {paren
                 .replace(/\W+/g, '-')
                 .replace(/([a-z\d])([A-Z])/g, '$1-$2')
                 .toLowerCase();
-                
-            //capturning the parent's state name.
-            var parentState: string = "";
-            if(config.parent){
-              parentState = config.parent.name.replace(/\w\S*/g, function (txt) {
-                return txt.charAt(0).toLowerCase() + txt.substr(1);
-              });
-            }
+            
             var template = '<' + selector + '></' + selector + '>';
             
             var stateName = target.name.replace(/\w\S*/g, function (txt) {
                 return txt.charAt(0).toLowerCase() + txt.substr(1);
             });
             
-            stateName = stateName + (config.parent ? ('.' + parentState) : '');
+            stateName = (config.parent ? (config.parent + '.') : '') + stateName;
             if(config.defaultRoute){
                 $urlRouterProvider.otherwise(config.defaultRoute);
             }
