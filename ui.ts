@@ -82,7 +82,22 @@ export function Service({selector, components = []}:{selector?: string; componen
         ngModule.service(serviceName, target);
     }
 }
-export function bootstrap(app: string, modules?: Array<string>){
-    angular.module(app, modules);
+export function bootstrap(app: any, modules?: Array<string>){
+      if (!modules) {
+          modules = ['component.ui'];
+      }
+      else {
+          modules.push('component.ui');
+      }
+    
+      try {
+          var m = angular.module('component.router');
+          modules.push('component.router');
+      }
+      catch (err) {
+    
+      }
+
+    angular.module(app.name, modules);
     angular.bootstrap(document, [app]);
 }

@@ -21,6 +21,6 @@ declare module ui {
         restrict?: string;
         link?: Function;
     });
-    function bootstrap(app: string, modules?: Array<string>);
+    function bootstrap(app: Function, modules?: Array<string>);
     function Service({selector}: {selector?: string});
 }

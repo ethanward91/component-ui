@@ -51,7 +51,7 @@ API's for the View decorator:
 
 In order to bootstrap our applications, which we have to now do manually since we are creating components/modules after angular's initial bootstrapping process. We just pull in the "bootstrap" function from the "component/ui" module:
 ```javascript
-  bootstrap('myApp', ['component.ui', '...Any other dependencies']);
+  bootstrap(MyApp, ['...Any other dependencies']);
 ```
 After we've setup our initial entry point for our application we simple drop the component in our index.html page as shown below:
 
@@ -97,8 +97,13 @@ To setup a routable component, simply import the "Router" decorator from the "co
 ```javascript
  import {Router} from 'component/router';
 ```
+Or ui-router
+```javascript
+  import {ComponentRouter} from 'component/router';
+```
+*Note: when using the ngRoute, you must supply the 'component.ui.router' module when bootstrapping the application.
 
-The current implementation for routing is using the ngRoute module (working on moving to ui-router). So our API for the Router decorator is as follows: 
+The current implementation for routing is using the ngRoute module (working on moving to ui-router)**. So our API for the Router decorator is as follows: 
 ```javascript
 	@Router({
     	url: '/myUrl'
@@ -112,10 +117,40 @@ The current implementation for routing is using the ngRoute module (working on m
   import {Router} from 'component/router';
 
   @View({
-    templateUrl: 'app/customer.html'
+    templateUrl: 'app/customers.html'
   })
   @Router({
-  	url: '/customer'
+  	url: '/customers'
+  })
+  export class Customers{
+    constructor(){
+
+    }
+  }
+```
+**ComponentRouter
+```javascript
+	@ComponentRouter({
+    	url: '/customer/:id'
+      config: {
+        parent: 'myApp', //What used for nested views.
+        defaultRoute: '/' //sets up the "otherwise" default route
+      }
+    })
+```
+```javascript
+  import {View} from 'component/ui';
+  import {ComponentRouter} from 'component/router';
+
+  @View({
+    templateUrl: 'app/customer.html'
+  })
+  @ComponentRouter({
+  	url: '/customer/:id'
+    config: {
+      parent: 'myApp', //What used for nested views.
+      defaultRoute: '/' //sets up the "otherwise" default route
+    }
   })
   export class Customer{
     constructor(){
@@ -123,6 +158,8 @@ The current implementation for routing is using the ngRoute module (working on m
     }
   }
 ```
+
+
 Now that we've set up a routable component. We need to tell the entry component that we are going to be using this in our application.
 ```javascript
   import {View} from 'component/ui';
@@ -246,20 +283,20 @@ To use the above service in our component we just import the service, and tell t
 
 ```javascript
   import {View} from 'component/ui';
-  import {Router} from 'component/router';
+  import {ComponentRouter} from 'component/router';
   import {MyService} from 'services/myService';
 
   @View({
-    templateUrl: 'app/pageOne.html',
+    templateUrl: 'app/customers.html',
     components: [MyService]
   })
-  @Router({
-  	url: '/PageOne'
+  @ComponentRouter({
+  	url: '/customers'
   })
-  export class PageOne{
+  export class Customers{
   	public customers;
     constructor(private MySerivce){
-		this.customers = this.MyService.getCustomers();
+  		this.customers = this.MyService.getCustomers();
     }
   }
 ```

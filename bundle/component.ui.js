@@ -90,7 +90,16 @@ define("src/ui.js", ["require", "exports"], function(require, exports) {
   }
   exports.Service = Service;
   function bootstrap(app, modules) {
-    angular.module(app, modules);
+    if (!modules) {
+      modules = ['component.ui'];
+    } else {
+      modules.push('component.ui');
+    }
+    try {
+      var m = angular.module('component.router');
+      modules.push('component.router');
+    } catch (err) {}
+    angular.module(app.name, modules);
     angular.bootstrap(document, [app]);
   }
   exports.bootstrap = bootstrap;
