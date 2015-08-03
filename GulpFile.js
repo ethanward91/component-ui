@@ -31,7 +31,7 @@
     });
     
     gulp.task('compileTypescript', function(){
-        return gulp.src(['ui.ts', 'router.ts'])
+        return gulp.src(['src/ui.ts', 'src/router.ts'])
               .pipe(tsc({
                 target: 'ES5',
                 module: 'amd',
