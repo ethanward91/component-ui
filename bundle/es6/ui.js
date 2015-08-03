@@ -72,5 +72,5 @@ export function bootstrap(app, modules) {
     catch (err) {
     }
     angular.module(app.name, modules);
-    angular.bootstrap(document, [app]);
+    angular.bootstrap(document, [app.name]);
 }

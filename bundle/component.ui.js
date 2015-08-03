@@ -100,7 +100,7 @@ define("src/ui.js", ["require", "exports"], function(require, exports) {
       modules.push('component.router');
     } catch (err) {}
     angular.module(app.name, modules);
-    angular.bootstrap(document, [app]);
+    angular.bootstrap(document, [app.name]);
   }
   exports.bootstrap = bootstrap;
 });
