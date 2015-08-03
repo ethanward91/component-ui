@@ -30,7 +30,7 @@
         return gulp.src('');
     });
     
-    gulp.task('compileTypescript', function(){
+    gulp.task('compileTypescript', ['compileES6Files'], function(){
         return gulp.src(['src/ui.ts', 'src/router.ts'])
               .pipe(tsc({
                 target: 'ES5',
@@ -39,4 +39,12 @@
             }))
             .pipe(gulp.dest('src/'));
     });
+    
+    gulp.task('compileES6Files', function(){
+           return gulp.src(['src/ui.ts', 'src/router.ts'])
+              .pipe(tsc({
+                target: 'ES6'
+            }))
+            .pipe(gulp.dest('bundle/es6'));
+    })
 })();
