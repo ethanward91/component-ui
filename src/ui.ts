@@ -99,5 +99,5 @@ export function bootstrap(app: any, modules?: Array<string>){
       }
 
     angular.module(app.name, modules);
-    angular.bootstrap(document, [app]);
+    angular.bootstrap(document, [app.name]);
 }
