@@ -65,6 +65,16 @@ define(["require", "exports"], function (require, exports) {
         };
     }
     exports.Service = Service;
+    function Config() {
+        return function (target) {
+            ngModule.config(target);
+        };
+    }
+    exports.Config = Config;
+    function Constant(object) {
+        ngModule.constant(object);
+    }
+    exports.Constant = Constant;
     function bootstrap(app, modules) {
         if (!modules) {
             modules = ['component.ui'];

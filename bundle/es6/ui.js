@@ -58,6 +58,14 @@ export function Service({ selector, components = [] }) {
         ngModule.service(serviceName, target);
     };
 }
+export function Config() {
+    return function (target) {
+        ngModule.config(target);
+    };
+}
+export function Constant(object) {
+    ngModule.constant(object);
+}
 export function bootstrap(app, modules) {
     if (!modules) {
         modules = ['component.ui'];
