@@ -87,8 +87,8 @@ export function Config(){
         ngModule.config(target);
     }
 }
-export function Constant(object:any){
-    ngModule.constant(object);
+export function Constant(name: string, object:any){
+    ngModule.constant(name, object);
 }
 export function bootstrap(app: any, modules?: Array<string>){
       if (!modules) {

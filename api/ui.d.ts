@@ -24,5 +24,5 @@ declare module ui {
     function bootstrap(app: Function, modules?: Array<string>);
     function Service({selector}: {selector?: string});
     function Config();
-    function Constant(object:any);
+    function Constant(name:string, object:any);
 }
