@@ -14,7 +14,7 @@ export function Router({ url, config = {} }) {
 }
 ///TODO: Replace with above and rename to just Router
 ngModule = angular.module('component.router', ['ui.router']);
-export function ComponentRouter({ url, config = {} }) {
+export function ComponentRouter({ url, config = { useAsNamedView: false } }) {
     return function (target) {
         ngModule.config(['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => {
                 var selector = target.name
@@ -36,6 +36,13 @@ export function ComponentRouter({ url, config = {} }) {
                     Object.getOwnPropertyNames(config.params).forEach((item) => {
                         stateConfig[item] = config.params[item];
                     });
+                }
+                if (config.useAsNamedView) {
+                    stateConfig.views[selector] = {
+                        template: template,
+                        controller: target,
+                        controllerAs: selector
+                    };
                 }
                 $stateProvider
                     .state(stateName, stateConfig);

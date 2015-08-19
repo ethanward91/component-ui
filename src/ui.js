@@ -71,8 +71,8 @@ define(["require", "exports"], function (require, exports) {
         };
     }
     exports.Config = Config;
-    function Constant(object) {
-        ngModule.constant(object);
+    function Constant(name, object) {
+        ngModule.constant(name, object);
     }
     exports.Constant = Constant;
     function bootstrap(app, modules) {

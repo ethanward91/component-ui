@@ -19,7 +19,7 @@ export function Router({url, config = {}}: {url:string; config?:any}){
 
 ///TODO: Replace with above and rename to just Router
 ngModule = angular.module('component.router', ['ui.router']);
-export function ComponentRouter({url, config = {}}: {url:string; config?: {parent?: string; defaultRoute?: string; params?: any}}){
+export function ComponentRouter({url, config = {useAsNamedView: false}}: {url:string; config?: {parent?: string; defaultRoute?: string; useAsNamedView?: boolean; params?: any}}){
     return function(target){
         ngModule.config(['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => {
                 
@@ -49,6 +49,15 @@ export function ComponentRouter({url, config = {}}: {url:string; config?: {paren
                     stateConfig[item] = config.params[item];
                 });
             }
+            
+            if(config.useAsNamedView){
+                stateConfig.views[selector] = {
+                    template: template,
+                    controller: target,
+                    controllerAs: selector
+                }
+            }
+            
             
             $stateProvider
                 .state(stateName, stateConfig);
