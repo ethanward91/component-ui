@@ -42,7 +42,13 @@ define("src/router.js", ["require", "exports"], function(require, exports) {
         }
         if (config.useAsNamedView) {
           stateConfig.views = {};
-          stateConfig.views[selector] = {
+          var view;
+          if (config.params.viewName) {
+            view = config.params.viewName;
+          } else {
+            view = selector;
+          }
+          stateConfig.views[view] = {
             templateUrl: config.params.templateUrl,
             controller: target,
             controllerAs: selector

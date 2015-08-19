@@ -41,9 +41,21 @@ define(["require", "exports"], function (require, exports) {
                             stateConfig[item] = config.params[item];
                         });
                     }
+                    //Sets up the nested view
+                    //NOTE: By doing this we practically excluding the component/ui View decorator
+                    //since now the view code will be handled by the componentRouter
                     if (config.useAsNamedView) {
                         stateConfig.views = {};
-                        stateConfig.views[selector] = {
+                        var view;
+                        //give the consumer the option to set their own viewName
+                        //usefull for when you are using two seperate templates for the same nested-view
+                        if (config.params.viewName) {
+                            view = config.params.viewName;
+                        }
+                        else {
+                            view = selector;
+                        }
+                        stateConfig.views[view] = {
                             templateUrl: config.params.templateUrl,
                             controller: target,
                             controllerAs: selector
