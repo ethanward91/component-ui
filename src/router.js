@@ -42,8 +42,9 @@ define(["require", "exports"], function (require, exports) {
                         });
                     }
                     if (config.useAsNamedView) {
+                        stateConfig.views = {};
                         stateConfig.views[selector] = {
-                            template: template,
+                            templateUrl: config.params.templateUrl,
                             controller: target,
                             controllerAs: selector
                         };

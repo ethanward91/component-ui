@@ -51,8 +51,10 @@ export function ComponentRouter({url, config = {useAsNamedView: false}}: {url:st
             }
             
             if(config.useAsNamedView){
+                stateConfig.views = {};
+                
                 stateConfig.views[selector] = {
-                    template: template,
+                    templateUrl: config.params.templateUrl,
                     controller: target,
                     controllerAs: selector
                 }
