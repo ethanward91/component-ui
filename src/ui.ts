@@ -89,6 +89,7 @@ export function Directive({selector, properties, context, link = null}:{
                 controller: target,
                 controllerAs: directiveName,
                 templateUrl:target.templateUrl,
+                scope: {},
                 bindToController: properties,
                 restrict: restrict,
                 transclude: true,

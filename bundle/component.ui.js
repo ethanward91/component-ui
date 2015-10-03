@@ -83,6 +83,7 @@ define("src/ui.js", ["require", "exports"], function(require, exports) {
           controller: target,
           controllerAs: directiveName,
           templateUrl: target.templateUrl,
+          scope: {},
           bindToController: properties,
           restrict: restrict,
           transclude: true,
