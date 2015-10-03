@@ -3,70 +3,72 @@ var _removeDefine = System.get("@@amd-helpers").createDefine();
 define("src/ui.js", ["require", "exports"], function(require, exports) {
   angular.module('component.ui', ['component.ui.components']);
   var ngModule;
-  ngModule = angular.module('component.ui.components', []);
+  ngModule = angular.module('component.ui.components', ['ui.router']);
   function View(_a) {
     var selector = _a.selector,
-        template = _a.template,
-        templateUrl = _a.templateUrl,
-        _b = _a.directives,
-        directives = _b === void 0 ? [] : _b,
-        _c = _a.properties,
-        properties = _c === void 0 ? {} : _c,
-        _d = _a.transclude,
-        transclude = _d === void 0 ? false : _d,
-        _e = _a.restrict,
-        restrict = _e === void 0 ? 'E' : _e,
-        _f = _a.components,
-        components = _f === void 0 ? [] : _f;
+        components = _a.components;
     return function(target) {
-      var componentName;
-      if (selector) {
-        componentName = selector;
-      } else {
-        componentName = target.name.replace(/\w\S*/g, function(txt) {
-          return txt.charAt(0).toLowerCase() + txt.substr(1);
-        });
+      target.selector = selector;
+      var compProvider = new ComponentProvider();
+      compProvider.createComponent(target);
+      if (target.hasRoute) {
+        var routeProvider = new RouteProvider();
+        routeProvider.createRoute(target);
       }
-      ngModule.directive(componentName, function() {
-        return {
-          template: template,
-          controller: target,
-          controllerAs: componentName,
-          templateUrl: templateUrl,
-          require: directives,
-          scope: properties,
-          restrict: restrict,
-          transclude: transclude
-        };
-      });
     };
   }
   exports.View = View;
+  function Template(_a) {
+    var template = _a.template,
+        templateUrl = _a.templateUrl;
+    return function(target) {
+      target.template = template;
+      target.templateUrl = templateUrl;
+    };
+  }
+  exports.Template = Template;
   function Directive(_a) {
     var selector = _a.selector,
-        template = _a.template,
-        templateUrl = _a.templateUrl,
         properties = _a.properties,
-        _b = _a.restrict,
-        restrict = _b === void 0 ? 'A' : _b,
-        _c = _a.link,
-        link = _c === void 0 ? null : _c;
+        context = _a.context,
+        _b = _a.link,
+        link = _b === void 0 ? null : _b;
     return function(target) {
       var directiveName;
-      if (selector) {
-        directiveName = selector;
-      } else {
-        directiveName = target.name.replace(/\w\S*/g, function(txt) {
-          return txt.charAt(0).toLowerCase() + txt.substr(1);
-        });
+      directiveName = selector != undefined ? selector : target.name.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toLowerCase() + txt.substr(1);
+      });
+      var restrict;
+      switch (context) {
+        case 0:
+          restrict = "E";
+          break;
+        case 1:
+          restrict = "A";
+          break;
+        case 2:
+          restrict = "C";
+          break;
+        case 3:
+          restrict = "EA";
+          break;
+        case 4:
+          restrict = "EC";
+          break;
+        case 5:
+          restrict = "AC";
+          break;
+        default:
+          restrict = "EAC";
+          break;
       }
       ngModule.directive(directiveName, function() {
         return {
-          template: template,
+          template: target.template,
           controller: target,
           controllerAs: directiveName,
-          templateUrl: templateUrl,
-          scope: properties,
+          templateUrl: target.templateUrl,
+          bindToController: properties,
           restrict: restrict,
           link: link
         };
@@ -79,12 +81,7 @@ define("src/ui.js", ["require", "exports"], function(require, exports) {
         _b = _a.components,
         components = _b === void 0 ? [] : _b;
     return function(target) {
-      var serviceName;
-      if (selector) {
-        serviceName = selector;
-      } else {
-        serviceName = target.name;
-      }
+      var serviceName = selector != undefined ? selector : target.name;
       ngModule.service(serviceName, target);
     };
   }
@@ -113,6 +110,52 @@ define("src/ui.js", ["require", "exports"], function(require, exports) {
     angular.bootstrap(document, [app.name]);
   }
   exports.bootstrap = bootstrap;
+  (function(DirectiveContext) {
+    DirectiveContext[DirectiveContext["Element"] = 0] = "Element";
+    DirectiveContext[DirectiveContext["Attribute"] = 1] = "Attribute";
+    DirectiveContext[DirectiveContext["Class"] = 2] = "Class";
+    DirectiveContext[DirectiveContext["ElementAttribute"] = 3] = "ElementAttribute";
+    DirectiveContext[DirectiveContext["ElementClass"] = 4] = "ElementClass";
+    DirectiveContext[DirectiveContext["AttributeClass"] = 5] = "AttributeClass";
+    DirectiveContext[DirectiveContext["All"] = 6] = "All";
+  })(exports.DirectiveContext || (exports.DirectiveContext = {}));
+  var DirectiveContext = exports.DirectiveContext;
+  var RouteProvider = (function() {
+    function RouteProvider() {}
+    RouteProvider.prototype.createRoute = function(component) {
+      ngModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+        if (!component.routeConfig) {
+          component.routeConfig = {};
+        }
+        if (component.routeConfig.defaultRoute) {
+          $urlRouterProvider.otherwise(component.routeUrl);
+        }
+        var selector = component.selector.replace(/\W+/g, '-').replace(/([a-z\d])([A-Z])/g, '$1-$2').toLowerCase();
+        component.routeConfig.template = '<' + selector + '></' + selector + '>';
+        component.routeConfig.url = component.routeUrl;
+        $stateProvider.state(component.stateName, component.routeConfig);
+      }]);
+    };
+    return RouteProvider;
+  })();
+  var ComponentProvider = (function() {
+    function ComponentProvider() {}
+    ComponentProvider.prototype.createComponent = function(component) {
+      ngModule.directive(component.selector, function() {
+        return {
+          template: component.template,
+          controller: component,
+          controllerAs: component.selector,
+          templateUrl: component.templateUrl,
+          scope: true,
+          bindToController: true,
+          restrict: 'E',
+          transclude: true
+        };
+      });
+    };
+    return ComponentProvider;
+  })();
 });
 
 _removeDefine();

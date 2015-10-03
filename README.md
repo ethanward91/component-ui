@@ -16,16 +16,19 @@ By using features such as decorators to define your component, set your route, o
 
 ## Creating Components
 ### View Decorator
-Components are created by simply importing the "View" decorator from the "component/ui" module. The View decorator is mearly just an abstraction over angular directives.
+Components are created by simply importing the "View" and "Template" decorators from the "component/ui" module.
 
 ```javascript
-  import {View} from 'component/ui';
+  import {View, Template} from 'component/ui';
 ```
 
 ```javascript
-  import {View} from 'component/ui';
+  import {View, template} from 'component/ui';
 
   @View({
+    selector: "myApp"
+  })
+  @Template({
     templateUrl: 'app/myApp.html'
   })
   class MyApp{
@@ -34,17 +37,34 @@ Components are created by simply importing the "View" decorator from the "compon
     }
   }
 ```
-API's for the View decorator: 
+When creating components ordering of the decorators is key. Decorators are ran from the bottom up. So by having the View below the Template,
+when the component is setup it will have no template to set.
+```javascript
+  import {View, template} from 'component/ui';
+  
+  //Will not render the template because the component has been created before the template has been declared. 
+  @Template({
+    templateUrl: 'app/myApp.html'
+  })
+  @View({
+    selector: "myApp"
+  })
+  class MyApp{
+    constructor(){
+
+    }
+  }
+```
+
+API for the View and Template decorators: 
 ```javascript
 @View({
-  selector?: string, // Used if your component name is not the same name as your class.
-  template?: string,
-  templateUrl?: string,
-  properties?:any, //Isolate scope properties
-  restrict?: string, //Defaults to "E",
-  directives?:Array<string> | string, //This relates to the angular directive's require property
-  transclude?: boolean,
+  selector: string, // Name of your component
   components?: Array<Function> //List of components or sevices you need to register with the component.
+})
+@Template({
+  template: string,
+  templateUrl: string
 })
 ```
 
@@ -93,87 +113,71 @@ System.config({
 </html>
 ```
 ### Route Decorator
-To setup a routable component, simply import the "Router" decorator from the "component/router" module.
+To setup a routable component, simply import the "Router" and "RouteConfig" decorators from the "component/router" module.
 ```javascript
- import {Router} from 'component/router';
+ import {Router, RouteConfig} from 'component/router';
 ```
-Or ui-router
-```javascript
-  import {ComponentRouter} from 'component/router';
-```
-*Note: when using the ngRoute, you must supply the 'component.ui.router' module when bootstrapping the application.
-
-The current implementation for routing is using the ngRoute module (working on moving to ui-router)**. So our API for the Router decorator is as follows: 
+The Router decorator will set up the necessary parts for the View decorator to make your component routable. While the RouteConfig will set up any additional configuration you would like on the route. E.g. Setting a default route. 
 ```javascript
 	@Router({
-    	url: '/myUrl'
-        config: {
-        	//whatever values you need in your route.
-        }
+    	url: "/myUrl", //url of your component
+      stateName: "myRouteState" //this property is optional and will default to the name of your component class if not provided.
     })
+  @RouteConfig({
+    defaultRoute: true, //tells the router to set this component as it's default route.
+    parent: "myParent", //used if nesting routes.
+    params: {  // used for options parameters you would like to have on your route.
+      Options: ""
+    }
+  })
 ```
+Example of setting up a routable component.
 ```javascript
-  import {View} from 'component/ui';
-  import {Router} from 'component/router';
+  import {View, Template} from 'component/ui';
+  import {Router, RouteConfig} from 'component/router';
 
   @View({
-    templateUrl: 'app/customers.html'
+    selector: "customers"
+  })
+  @Template({
+    templateUrl: "app/customers.html"
   })
   @Router({
-  	url: '/customers'
+  	url: "/customers",
+    stateName: "customerList"
   })
-  export class Customers{
+  @RouteConfig({
+    defaultRoute: true, //This tells the router to set the url of this component to be the default route of the application.
+    params: {
+      title: "Customers" //The params property gives you the option to set custom properties on your route.
+    }
+  })
+  export class CustomerListComponent{
     constructor(){
 
     }
   }
 ```
-**ComponentRouter
-```javascript
-	@ComponentRouter({
-    	url: '/customer/:id'
-      config: {
-        parent: 'myApp', //What used for nested views.
-        defaultRoute: '/' //sets up the "otherwise" default route
-      }
-    })
-```
-```javascript
-  import {View} from 'component/ui';
-  import {ComponentRouter} from 'component/router';
-
-  @View({
-    templateUrl: 'app/customer.html'
-  })
-  @ComponentRouter({
-  	url: '/customer/:id'
-    config: {
-      parent: 'myApp', //What used for nested views.
-      defaultRoute: '/' //sets up the "otherwise" default route
-    }
-  })
-  export class Customer{
-    constructor(){
-
-    }
-  }
-```
-
 
 Now that we've set up a routable component. We need to tell the entry component that we are going to be using this in our application.
 ```javascript
-  import {View} from 'component/ui';
-  import {Customer} from 'directory/location/of/component'
+  import {View, Template, bootstrap} from 'component/ui';
+  import {CustomerListComponent} from 'directory/location/of/component'
 
   @View({
-    templateUrl: 'app/myApp.html',
-    components: [Customer]
+    selector: "myApp"
+    components: [CustomerListComponent]
+  })
+  @Template({
+     templateUrl: 'app/myApp.html',
   })
   class MyApp{
     constructor(){
 
     }
   }
+  
+  bootstrap(MyApp);
 ```
 Doing this will tell the module loader system, that this is a dependency in our application and needs to be loaded with our app.
 
@@ -182,71 +186,43 @@ The Directive decorator is used for creating DOM manipulating components that ar
 API's for the Directive decorator: 
 ```javascript
 @Directive({
-  selector?: string, // Used if your component name is not the same name as your class.
-  template?: string,
-  templateUrl?: string,
-  restrict?: string, //Defaults to "A",
-  properties?: any, //Isolate scope properties
-  link?: Function
-  directives?: Array<string>, //This relates to the angular directive's require property
-  components?: Array<Function> //List of components or sevices you need to register with the component.
-})
+        selector: string; //Selector of your directive
+        properties?: any; //Any scope properties that the directive requires. **Note.. These are being bound to the controller via the bindToController method.
+        context?: DirectiveContext; //The context of your directive (Attribute by default). See the DirectiveContext Enum.
+        link?: Function; //Option link function.
+    })
+```
+#### DirectiveContext Enum
+```javascript
+ enum DirectiveContext{
+        Element,
+        Attribute,
+        Class,
+        ElementAttribute,
+        ElementClass,
+        AttributeClass,
+        All
+    }
 ```
 
 Creating a Directive
 ```javascript
-import {Directive} from 'component/ui';
+import {Directive, Template} from 'component/ui';
 
 @Directive({
-	template: '<div>html template here</div>'
+	selector: "myDirective",
+  context: DirectiveContext.Attribute,
+  properties: {
+    myProperty: '@'
+  }
 })
-export class MyDatepicker{
-}
-```
-The main difference between the View decorator and the Directive decorator, is that the Directive decorator's restrict property is set to 'A' for attribute. This however can be overridden...
-```javascript
-import {Directive} from 'component/ui';
-
-@Directive({
-	template: '<div>html template here</div>',
-    restrict: 'EA'
+@Template({
+  template: '<div>html template here</div>'
 })
-export class MyDatepicker{
-}
-```
-You also have the ability to pass in a link function to the Directive decorator.
-
-*Note: Link functions can be passed to the View decorator.
-
-Via named function
-```javascript
-import {Directive} from 'component/ui';
-
-@Directive({
-	template: '<div>html template here</div>',
-    restrict: 'EA',
-    link: LinkFunction
-})
-export class MyDatepicker{
-}
-
-function LinkFunction(scope, elem, attrs, ctrl){
-	// do some DOM manipulations here.
-}
-```
-
-Via anonymous function
-```javascript
-import {Directive} from 'component/ui';
-
-@Directive({
-	template: '<div>html template here</div>',
-    restrict: 'EA',
-    link: (scope, elem, attrs, ctrl) => {
-    	//do some DOM manipulations here
-    }
-})
-export class MyDatepicker{
+export class MyDirective{
+  public myProperty: string;
+  constructor(){
+  }
 }
 ```
 
@@ -256,7 +232,7 @@ The Service decorator creates an angular service, names it after the associated 
 Service Decorator API
 ```javascript
 @Service({
-  selector?: string
+  selector?: string //Will take the class name by default
 })
 ```
 
@@ -282,20 +258,31 @@ export class MyService{
 To use the above service in our component we just import the service, and tell the component we are going to be using it.
 
 ```javascript
-  import {View} from 'component/ui';
-  import {ComponentRouter} from 'component/router';
-  import {MyService} from 'services/myService';
+  import {View, Template} from 'component/ui';
+  import {Router, RouteConfig} from 'component/router';
+  import {MySevice} from 'services/myService';
 
   @View({
-    templateUrl: 'app/customers.html',
-    components: [MyService]
+    selector: "customers"
   })
-  @ComponentRouter({
-  	url: '/customers'
+  @Template({
+    templateUrl: "app/customers.html"
   })
-  export class Customers{
+  @Router({
+  	url: "/customers",
+    stateName: "customerList"
+  })
+  @RouteConfig({
+    defaultRoute: true, //This tells the router to set the url of this component to be the default route of the application.
+    params: {
+      title: "Customers" //The params property gives you the option to set custom properties on your route.
+    }
+  })
+  export class CustomeCustomerListComponentrs{
   	public customers;
-    constructor(private MySerivce){
+    //We are using Angular's Dependency injection to do the work of getting the service to the controller
+    //But we are also using the import Service definition to get our typing.
+    constructor(private MySerivce: MyService){
   		this.customers = this.MyService.getCustomers();
     }
   }

@@ -1,20 +1,32 @@
 define(["require", "exports"], function (require, exports) {
     var ngModule;
-    ngModule = angular.module('component.ui.router', ['ngRoute']);
+    ngModule = angular.module('component.router', []);
     function Router(_a) {
-        var url = _a.url, _b = _a.config, config = _b === void 0 ? {} : _b;
+        var url = _a.url, stateName = _a.stateName;
         return function (target) {
-            ngModule.config(['$routeProvider', function ($routeProvider) {
-                    var selector = target.name
-                        .replace(/\W+/g, '-')
-                        .replace(/([a-z\d])([A-Z])/g, '$1-$2')
-                        .toLowerCase();
-                    config.template = '<' + selector + '></' + selector + '>';
-                    $routeProvider.when(url, config);
-                }]);
+            target.hasRoute = true;
+            target.routeUrl = url;
+            target.stateName = stateName != undefined ? stateName : target.name.replace(/\w\S*/g, function (txt) {
+                return txt.charAt(0).toLowerCase() + txt.substr(1);
+            });
         };
     }
     exports.Router = Router;
+    function RouteConfig(_a) {
+        var defaultRoute = _a.defaultRoute, parent = _a.parent, params = _a.params;
+        return function (target) {
+            //Setting up our routeConfig object.
+            target.routeConfig = {};
+            target.routeConfig.defaultRoute = defaultRoute;
+            target.routeConfig.parent = parent;
+            if (params) {
+                Object.getOwnPropertyNames(params).forEach(function (item) {
+                    target.routeConfig[item] = params[item];
+                });
+            }
+        };
+    }
+    exports.RouteConfig = RouteConfig;
     ///TODO: Replace with above and rename to just Router
     ngModule = angular.module('component.router', ['ui.router']);
     function ComponentRouter(_a) {
