@@ -31,7 +31,7 @@ define(["require", "exports"], function (require, exports) {
             var directiveName;
             directiveName = selector != undefined ? selector : target.name.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toLowerCase() + txt.substr(1); });
             var restrict;
-            if (context) {
+            if (context != undefined) {
                 switch (context) {
                     case 0:
                         restrict = "E";

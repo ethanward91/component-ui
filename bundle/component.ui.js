@@ -39,7 +39,7 @@ define("src/ui.js", ["require", "exports"], function(require, exports) {
         return txt.charAt(0).toLowerCase() + txt.substr(1);
       });
       var restrict;
-      if (context) {
+      if (context != undefined) {
         switch (context) {
           case 0:
             restrict = "E";

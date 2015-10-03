@@ -40,7 +40,7 @@ export function Directive({selector, properties, context, link = null}:{
         
         var restrict:string;
         
-        if(context){
+        if(context != undefined){
             switch(context){
                 case 0:
                     restrict = "E";
