@@ -38,6 +38,10 @@ declare module ui {
      * Adds constants to the bootstrapped angular application.
      */
     function Constant(name:string, object:any);
+    
+    /**
+     * Used to set the context of the directive component.
+     */
     enum DirectiveContext{
         Element,
         Attribute,
@@ -47,4 +51,12 @@ declare module ui {
         AttributeClass,
         All
     }
+    /**
+     * Used to set what property type you are using on the directive properties.
+     */
+    enum PropertyType{
+    String,
+    Expression,
+    Bindable
+}
 }

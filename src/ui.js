@@ -31,29 +31,46 @@ define(["require", "exports"], function (require, exports) {
             var directiveName;
             directiveName = selector != undefined ? selector : target.name.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toLowerCase() + txt.substr(1); });
             var restrict;
-            switch (context) {
-                case 0:
-                    restrict = "E";
-                    break;
-                case 1:
-                    restrict = "A";
-                    break;
-                case 2:
-                    restrict = "C";
-                    break;
-                case 3:
-                    restrict = "EA";
-                    break;
-                case 4:
-                    restrict = "EC";
-                    break;
-                case 5:
-                    restrict = "AC";
-                    break;
-                default:
-                    restrict = "EAC";
-                    break;
+            if (context) {
+                switch (context) {
+                    case 0:
+                        restrict = "E";
+                        break;
+                    case 1:
+                        restrict = "A";
+                        break;
+                    case 2:
+                        restrict = "C";
+                        break;
+                    case 3:
+                        restrict = "EA";
+                        break;
+                    case 4:
+                        restrict = "EC";
+                        break;
+                    case 5:
+                        restrict = "AC";
+                        break;
+                    default:
+                        restrict = "EAC";
+                        break;
+                }
             }
+            else {
+                restrict = "A";
+            }
+            //transforming the values on properties from the enum to the appropriate values.
+            Object.getOwnPropertyNames(properties).forEach(function (item) {
+                if (properties[item] == 0) {
+                    properties[item] = "@";
+                }
+                if (properties[item] == 1) {
+                    properties[item] = "&";
+                }
+                if (properties[item] == 2) {
+                    properties[item] = "=";
+                }
+            });
             ngModule.directive(directiveName, function () {
                 return {
                     template: target.template,
@@ -62,6 +79,7 @@ define(["require", "exports"], function (require, exports) {
                     templateUrl: target.templateUrl,
                     bindToController: properties,
                     restrict: restrict,
+                    transclude: true,
                     link: link
                 };
             });
@@ -114,6 +132,12 @@ define(["require", "exports"], function (require, exports) {
         DirectiveContext[DirectiveContext["All"] = 6] = "All";
     })(exports.DirectiveContext || (exports.DirectiveContext = {}));
     var DirectiveContext = exports.DirectiveContext;
+    (function (PropertyType) {
+        PropertyType[PropertyType["String"] = 0] = "String";
+        PropertyType[PropertyType["Expression"] = 1] = "Expression";
+        PropertyType[PropertyType["Bindable"] = 2] = "Bindable";
+    })(exports.PropertyType || (exports.PropertyType = {}));
+    var PropertyType = exports.PropertyType;
     //Private Classes
     var RouteProvider = (function () {
         function RouteProvider() {

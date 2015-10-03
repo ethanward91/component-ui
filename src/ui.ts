@@ -68,6 +68,20 @@ export function Directive({selector, properties, context, link = null}:{
         else{
             restrict = "A";
         }
+        
+        //transforming the values on properties from the enum to the appropriate values.
+        Object.getOwnPropertyNames(properties).forEach(item =>{
+            
+            if(properties[item] == 0){
+                properties[item] = "@";
+            }
+            if(properties[item] == 1){
+                properties[item] = "&";
+            }
+            if(properties[item] == 2){
+                properties[item] = "=";
+            }
+        })
 
         ngModule.directive(directiveName, () =>{
             return {
@@ -77,6 +91,7 @@ export function Directive({selector, properties, context, link = null}:{
                 templateUrl:target.templateUrl,
                 bindToController: properties,
                 restrict: restrict,
+                transclude: true,
                 link: link
             }
         });
@@ -127,6 +142,11 @@ export enum DirectiveContext{
     ElementClass,
     AttributeClass,
     All
+}
+export enum PropertyType{
+    String,
+    Expression,
+    Bindable
 }
 
 //Private Classes
