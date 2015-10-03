@@ -18,11 +18,11 @@ By using features such as decorators to define your component, set your route, o
 ### View Decorator
 Components are created by simply importing the "View" and "Template" decorators from the "component/ui" module.
 
-```javascript
+```typescript
   import {View, Template} from 'component/ui';
 ```
 
-```javascript
+```typescript
   import {View, template} from 'component/ui';
 
   @View({
@@ -39,7 +39,7 @@ Components are created by simply importing the "View" and "Template" decorators 
 ```
 When creating components ordering of the decorators is key. Decorators are ran from the bottom up. So by having the View below the Template,
 when the component is setup it will have no template to set.
-```javascript
+```typescript
   import {View, template} from 'component/ui';
   
   //Will not render the template because the component has been created before the template has been declared. 
@@ -57,7 +57,7 @@ when the component is setup it will have no template to set.
 ```
 
 API for the View and Template decorators: 
-```javascript
+```typescript
 @View({
   selector: string, // Name of your component
   components?: Array<Function> //List of components or sevices you need to register with the component.
@@ -70,7 +70,7 @@ API for the View and Template decorators:
 
 
 In order to bootstrap our applications, which we have to now do manually since we are creating components/modules after angular's initial bootstrapping process. We just pull in the "bootstrap" function from the "component/ui" module:
-```javascript
+```typescript
   bootstrap(MyApp, ['...Any other dependencies']);
 ```
 After we've setup our initial entry point for our application we simple drop the component in our index.html page as shown below:
@@ -89,7 +89,7 @@ After we've setup our initial entry point for our application we simple drop the
 
 Now that we have our entry component setup and wired into our index.html. Next is to wire up the System.js loader, or module loader of your choice, and setup our System.config to map our modules.
 
-```javascript
+```typescript
 System.config({
 	"map": {
     	"app": "myApp.js"
@@ -114,11 +114,11 @@ System.config({
 ```
 ### Route Decorator
 To setup a routable component, simply import the "Router" and "RouteConfig" decorators from the "component/router" module.
-```javascript
+```typescript
  import {Router, RouteConfig} from 'component/router';
 ```
 The Router decorator will set up the necessary parts for the View decorator to make your component routable. While the RouteConfig will set up any additional configuration you would like on the route. E.g. Setting a default route. 
-```javascript
+```typescript
 	@Router({
     	url: "/myUrl", //url of your component
       stateName: "myRouteState" //this property is optional and will default to the name of your component class if not provided.
@@ -132,7 +132,7 @@ The Router decorator will set up the necessary parts for the View decorator to m
   })
 ```
 Example of setting up a routable component.
-```javascript
+```typescript
   import {View, Template} from 'component/ui';
   import {Router, RouteConfig} from 'component/router';
 
@@ -160,7 +160,7 @@ Example of setting up a routable component.
 ```
 
 Now that we've set up a routable component. We need to tell the entry component that we are going to be using this in our application.
-```javascript
+```typescript
   import {View, Template, bootstrap} from 'component/ui';
   import {CustomerListComponent} from 'directory/location/of/component'
 
@@ -184,7 +184,7 @@ Doing this will tell the module loader system, that this is a dependency in our 
 ### Directive Decorator
 The Directive decorator is used for creating DOM manipulating components that aren't page level elements. i.e a datepicker widget.
 API's for the Directive decorator: 
-```javascript
+```typescript
 @Directive({
         selector: string; //Selector of your directive
         properties?: any; //Any scope properties that the directive requires. **Note.. These are being bound to the controller via the bindToController method.
@@ -193,7 +193,7 @@ API's for the Directive decorator:
     })
 ```
 #### DirectiveContext Enum
-```javascript
+```typescript
  enum DirectiveContext{
         Element,
         Attribute,
@@ -206,7 +206,7 @@ API's for the Directive decorator:
 ```
 
 Creating a Directive
-```javascript
+```typescript
 import {Directive, Template} from 'component/ui';
 
 @Directive({
@@ -230,14 +230,14 @@ export class MyDirective{
 The Service decorator creates an angular service, names it after the associated class, and then add the service to the "component.ui" module.
 
 Service Decorator API
-```javascript
+```typescript
 @Service({
   selector?: string //Will take the class name by default
 })
 ```
 
 Creating a Service
-```javascript
+```typescript
 import {Service} from 'component/ui';
 
 @Service({})
@@ -257,7 +257,7 @@ export class MyService{
 ```
 To use the above service in our component we just import the service, and tell the component we are going to be using it.
 
-```javascript
+```typescript
   import {View, Template} from 'component/ui';
   import {Router, RouteConfig} from 'component/router';
   import {MySevice} from 'services/myService';
