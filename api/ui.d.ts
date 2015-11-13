@@ -29,7 +29,7 @@ declare module ui {
     /**
      * Creates a new Service Component.
      */
-    function Service({selector}: {selector?: string});
+    function Service({selector, services}: {selector? : string, services: Array<Function>});
     /**
      * Creates a new Config Component.
      */
