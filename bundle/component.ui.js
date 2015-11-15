@@ -127,6 +127,12 @@ define("src/ui.js", ["require", "exports"], function(require, exports) {
     angular.bootstrap(document, [app.name]);
   }
   exports.bootstrap = bootstrap;
+  function StartUp() {
+    return function(target) {
+      ngModule.run(target);
+    };
+  }
+  exports.StartUp = StartUp;
   (function(DirectiveContext) {
     DirectiveContext[DirectiveContext["Element"] = 0] = "Element";
     DirectiveContext[DirectiveContext["Attribute"] = 1] = "Attribute";

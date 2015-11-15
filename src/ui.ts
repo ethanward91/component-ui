@@ -132,6 +132,11 @@ export function bootstrap(app: any, modules?: Array<string>){
     angular.module(app.name, modules);
     angular.bootstrap(document, [app.name]);
 }
+export function StartUp(){
+    return function(target){
+        ngModule.run(target);
+    }
+}
 
 //Enums
 

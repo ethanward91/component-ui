@@ -122,6 +122,12 @@ define(["require", "exports"], function (require, exports) {
         angular.bootstrap(document, [app.name]);
     }
     exports.bootstrap = bootstrap;
+    function StartUp() {
+        return function (target) {
+            ngModule.run(target);
+        };
+    }
+    exports.StartUp = StartUp;
     //Enums
     (function (DirectiveContext) {
         DirectiveContext[DirectiveContext["Element"] = 0] = "Element";

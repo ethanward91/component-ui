@@ -110,6 +110,11 @@ export function bootstrap(app, modules) {
     angular.module(app.name, modules);
     angular.bootstrap(document, [app.name]);
 }
+export function StartUp() {
+    return function (target) {
+        ngModule.run(target);
+    };
+}
 //Enums
 export var DirectiveContext;
 (function (DirectiveContext) {

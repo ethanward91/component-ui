@@ -29,7 +29,7 @@ declare module ui {
     /**
      * Creates a new Service Component.
      */
-    function Service({selector, services}: {selector? : string, services: Array<Function>});
+    function Service({selector, services}: {selector? : string, services?: Array<Function>});
     /**
      * Creates a new Config Component.
      */
@@ -38,6 +38,11 @@ declare module ui {
      * Adds constants to the bootstrapped angular application.
      */
     function Constant(name:string, object:any);
+    /**
+     * Declares a startup class.
+     * angular.module().run();
+     */
+    function StartUp();
     
     /**
      * Used to set the context of the directive component.
@@ -55,8 +60,8 @@ declare module ui {
      * Used to set what property type you are using on the directive properties.
      */
     enum PropertyType{
-    String,
-    Expression,
-    Bindable
-}
+        String,
+        Expression,
+        Bindable
+    }
 }
